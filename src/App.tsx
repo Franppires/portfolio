@@ -1,35 +1,194 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import logo from "./assets/logo.svg"
+import html from "./assets/html.svg"
+
+
+import css from "./assets/css.svg"
+import javascript from "./assets/javascript.svg"
+import react from "./assets/react.svg"
+import styled_components from "./assets/styled_components.svg"
+import typescript from "./assets/typescript.svg"
+import figma from "./assets/figma.svg"
+import linkedin from "./assets/linkedin.svg"
+import whatsapp from "./assets/whatsapp.svg"
+import email from "./assets/email.svg"
+import github from "./assets/github.svg"
+import link from "./assets/link.svg"
+import monica_magalhaes from "./assets/monica_magalhaes.svg"
+import app_pagamentos from "./assets/app_pagamentos.svg"
+import controle_financeiro from "./assets/controle_financeiro.svg"
+import lembrete_aniversarios from "./assets/lembrete_aniversarios.svg"
+import tours from "./assets/tours.svg"
+import mini from "./assets/mini.svg"
+import { Card, CardProject, Contact, Gradient, Header, Main, Technologies, Title } from "./styles/style"
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <>
+      <Header>
+        <img src={logo} className="logo" alt="Vite logo" />
+        <nav>
+          <li><a href="">SOBRE</a></li>
+          <li><a href="">PROJETOS</a></li>
+          <li><a href="">HABILIDADES</a></li>
+          <li><a href="">CONTATO</a></li>
+        </nav>
+      </Header>
+      <Main>
+        <span>Olá, eu sou</span>
+        <Gradient>Franciane Pires</Gradient>
+        <p>Sou desenvolvedora Front-end gosto de criar coisas que vivem na internet experiênte em negociação, vendas, organização, atendimento, analise de dados, gestão operacional estou construindo uma carreira em desenvolvimento Full Stack.</p>
+        <p>Trabalho como freelancer construindo experiência e conhecimento valioso ao longo de meus projetos.</p>
+        <p>Abaixo podem acessar meus trabalhos </p>
+      </Main>
+      <Title>PROJETOS</Title>
+      <Card>
+        <CardProject>
+          <img src={monica_magalhaes} alt="" />
+          <div>
+            <h3>Portfólio Mônica Magalhães</h3>
+            <a href="https://github.com/Franppires/monica_magalhaes" target="_blank"><img src={github} alt="" /></a>
+            <a href="https://monicamagalhaes.netlify.app" target="_blank"><img src={link} alt="" /></a>
+          </div> 
+
+          <p>Portfólio da UX Designer Mônica nele contem seus melhores trabalhos na área de designer, informações pessoais e contato.</p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Javascript</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={app_pagamentos} alt="" />
+          <div>
+            <h3>App de Pagamentos</h3>
+            <a href="https://github.com/Franppires/app_pagamentos_newtab" target="_blank"><img src={github} alt="" /></a>
+            <a href="https://appdepagamentos.netlify.app/" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Aplicação que simula o envio de dinheiro para uma outra pessoa, via cartão de crédito usando api. </p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Javascript</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={controle_financeiro} alt="" />
+          <div>
+            <h3>Controle Financeiro</h3>
+            <a href="https://github.com/Franppires/controle_financeiro_newtab" target="_blank"><img src={github} alt="" /></a>
+            <a href="https://franppires.github.io/controle_financeiro_newtab/" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Javascript</li>
+          </ul>
+        </CardProject>
+
+        <CardProject>
+          <img src={lembrete_aniversarios} alt="" />
+          <div>
+            <h3>Lembrete de Aniversários</h3>
+            <a href="https://github.com/Franppires/lembrete_aniversario_front_beginners" target="_blank"><img src={github} alt="" /></a>
+            <a href="https://lembretedeaniversario.netlify.app/" target="_blank"><img src={link} alt="" /></a>
+          </div> 
+
+          <p>Lista de aniversários e componente para redenrizar.</p>
+          <ul>
+            <li>React</li>
+            <li>CSS</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={tours} alt="" />
+          <div>
+            <h3>Tours</h3>
+            <a href="https://github.com/Franppires/destinations_tours" target="_blank"><img src={github} alt="" /></a>
+            <a href="https://destinationsandtours.netlify.app/" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Aplicação que simula o envio de dinheiro para uma outra pessoa, via cartão de crédito usando api. </p>
+          <ul>
+            <li>React</li>
+            <li>CSS</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={mini} alt="" />
+          <div>
+            <h3>Controle Financeiro</h3>
+            <a href="https://github.com/Franppires/mini_portfolio_dev_em_dobro" target="_blank"><img src={github} alt="" /></a>
+            <a href="https://franppires.github.io/mini_portfolio_dev_em_dobro/" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Javascript</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={mini} alt="" />
+          <div>
+            <h3>Controle Financeiro</h3>
+            <a href="https://github.com/Franppires/mini_portfolio_dev_em_dobro" target="_blank"><img src={github} alt="" /></a>
+            <a href="https://franppires.github.io/mini_portfolio_dev_em_dobro/" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+          </ul>
+        </CardProject>
+      </Card>
+
+
+      <Title>HABILIDADES</Title>
+      <Technologies>
+        <img src={html} alt="" />
+        <img src={css} alt="" />
+        <img src={javascript} alt="" />
+        <img src={typescript} alt="" />
+        <img src={react} alt="" />
+        <img src={styled_components} alt="" />
+        <img src={figma} alt="" />
+      </Technologies>
+
+
+      <Title>CONTATO</Title>
+      <Contact>
+        <button >
+          <a href="https://www.linkedin.com/in/franciane-pires/" target="_blank">
+            <img src={linkedin} alt="" /> 
+            <p>Linkedin</p>
+          </a>  
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+        <button>
+          <a href="https://github.com/Franppires" target="_blank">
+            <img src={github} alt="" />
+            <p>Github</p>
+          </a>
+        </button>
+        <button>
+          <a href="https://contate.me/franppires" target="_blank">
+            <img src={whatsapp} alt="" />
+            <p>Whatsapp</p>
+          </a>
+        </button>
+        <button>
+          <a href="mailto:contatofranpires@gmail.com" target="_blank">
+            <img src={email} alt="" />
+            <p>E-mail</p>
+          </a>
+        </button>
+      </Contact> 
+      
+    </>
   )
 }
 
 export default App
+
+
