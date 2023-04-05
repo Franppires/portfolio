@@ -3,11 +3,13 @@ import whatsapp from "../assets/whatsapp.svg"
 import email from "../assets/email.svg"
 import github from "../assets/github.svg"
 import { Contact, Title } from '../styles/style'
-
+import Menu from "./menu"
+import Copyright from "./copyright"
 
 export default function Data() {
   return (
     <>
+        <Menu />
         <Title id="contact">CONTATO</Title>
         <Contact>
             <button >
@@ -35,6 +37,7 @@ export default function Data() {
             </a>
             </button>
         </Contact> 
+        <Copyright />
     </>
   )
 }

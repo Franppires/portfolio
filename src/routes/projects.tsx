@@ -11,154 +11,157 @@ import produto from "../assets/produto.svg"
 import formulario from "../assets/formulario.svg"
 import starbucks from "../assets/starbucks.svg"
 import { Card, CardProject, Title } from '../styles/style'
+import Menu from "./menu"
+import Copyright from "./copyright"
 
 export default function Projects() {
   return (
     <>
-        <Title id="projects">PROJETOS</Title>
-        <Card>
-        <CardProject>
-          <img src={monica_magalhaes} alt="" />
-          <div>
-            <h3>Portfólio Mônica Magalhães</h3>
-            <a href="https://github.com/Franppires/monica_magalhaes" target="_blank"><img src={github} alt="" /></a>
-            <a href="https://monicamagalhaes.netlify.app" target="_blank"><img src={link} alt="" /></a>
-          </div> 
+      <Menu />
+      <Title id="projects">PROJETOS</Title>
+      <Card>
+      <CardProject>
+        <img src={monica_magalhaes} alt="" />
+        <div>
+          <h3>Portfólio Mônica Magalhães</h3>
+          <a href="https://github.com/Franppires/monica_magalhaes" target="_blank"><img src={github} alt="" /></a>
+          <a href="https://monicamagalhaes.netlify.app" target="_blank"><img src={link} alt="" /></a>
+        </div> 
 
-          <p>Portfólio da UX Designer Mônica nele contem seus melhores trabalhos na área de designer, informações pessoais e contato.</p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={app_pagamentos} alt="" />
-          <div>
-            <h3>App de Pagamentos</h3>
-            <a href="https://github.com/Franppires/app_pagamentos_newtab" target="_blank"><img src={github} alt="" /></a>
-            <a href="https://appdepagamentos.netlify.app/" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Aplicação que simula o envio de dinheiro para uma outra pessoa, via cartão de crédito usando api. </p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={controle_financeiro} alt="" />
-          <div>
-            <h3>Controle Financeiro</h3>
-            <a href="https://github.com/Franppires/controle_financeiro_newtab" target="_blank"><img src={github} alt="" /></a>
-            <a href="https://franppires.github.io/controle_financeiro_newtab/" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
+        <p>Portfólio da UX Designer Mônica nele contem seus melhores trabalhos na área de designer, informações pessoais e contato.</p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={app_pagamentos} alt="" />
+        <div>
+          <h3>App de Pagamentos</h3>
+          <a href="https://github.com/Franppires/app_pagamentos_newtab" target="_blank"><img src={github} alt="" /></a>
+          <a href="https://appdepagamentos.netlify.app/" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Aplicação que simula o envio de dinheiro para uma outra pessoa, via cartão de crédito usando api. </p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={controle_financeiro} alt="" />
+        <div>
+          <h3>Controle Financeiro</h3>
+          <a href="https://github.com/Franppires/controle_financeiro_newtab" target="_blank"><img src={github} alt="" /></a>
+          <a href="https://franppires.github.io/controle_financeiro_newtab/" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={lembrete_aniversarios} alt="" />
+        <div>
+          <h3>Lembrete de Aniversários</h3>
+          <a href="https://github.com/Franppires/lembrete_aniversario_front_beginners" target="_blank"><img src={github} alt="" /></a>
+          <a href="https://lembretedeaniversario.netlify.app/" target="_blank"><img src={link} alt="" /></a>
+        </div> 
 
-        <CardProject>
-          <img src={lembrete_aniversarios} alt="" />
-          <div>
-            <h3>Lembrete de Aniversários</h3>
-            <a href="https://github.com/Franppires/lembrete_aniversario_front_beginners" target="_blank"><img src={github} alt="" /></a>
-            <a href="https://lembretedeaniversario.netlify.app/" target="_blank"><img src={link} alt="" /></a>
-          </div> 
-
-          <p>Lista de aniversários e componente para redenrizar.</p>
-          <ul>
-            <li>React</li>
-            <li>CSS</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={tours} alt="" />
-          <div>
-            <h3>Tours</h3>
-            <a href="https://github.com/Franppires/destinations_tours" target="_blank"><img src={github} alt="" /></a>
-            <a href="https://destinationsandtours.netlify.app/" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Aplicação que simula o envio de dinheiro para uma outra pessoa, via cartão de crédito usando api. </p>
-          <ul>
-            <li>React</li>
-            <li>CSS</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={mini} alt="" />
-          <div>
-            <h3>Controle Financeiro</h3>
-            <a href="https://github.com/Franppires/mini_portfolio_dev_em_dobro" target="_blank"><img src={github} alt="" /></a>
-            <a href="https://franppires.github.io/mini_portfolio_dev_em_dobro/" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={cadastro} alt="" />
-          <div>
-            <h3>Cadastro de dados </h3>
-            <a href="" target="_blank"><img src={github} alt="" /></a>
-            <a href="" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Cadastro e listagem de novos cadidatos, validação de   formulario e mascara de numero. </p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={formulario} alt="" />
-          <div>
-            <h3>Formulário</h3>
-            <a href="" target="_blank"><img src={github} alt="" /></a>
-            <a href="" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Validar campos do formulário para preenchimento. </p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={starbucks} alt="" />
-          <div>
-            <h3>Starbucks</h3>
-            <a href="" target="_blank"><img src={github} alt="" /></a>
-            <a href="" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Site clone do starbucks </p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
-        <CardProject>
-          <img src={produto} alt="" />
-          <div>
-            <h3>Visualização de produto </h3>
-            <a href="" target="_blank"><img src={github} alt="" /></a>
-            <a href="" target="_blank"><img src={link} alt="" /></a>
-          </div>
-          <p>Componente de cartão de visualização do produto </p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Javascript</li>
-          </ul>
-        </CardProject>
+        <p>Lista de aniversários e componente para redenrizar.</p>
+        <ul>
+          <li>React</li>
+          <li>CSS</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={tours} alt="" />
+        <div>
+          <h3>Tours</h3>
+          <a href="https://github.com/Franppires/destinations_tours" target="_blank"><img src={github} alt="" /></a>
+          <a href="https://destinationsandtours.netlify.app/" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Aplicação que simula o envio de dinheiro para uma outra pessoa, via cartão de crédito usando api. </p>
+        <ul>
+          <li>React</li>
+          <li>CSS</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={mini} alt="" />
+        <div>
+          <h3>Controle Financeiro</h3>
+          <a href="https://github.com/Franppires/mini_portfolio_dev_em_dobro" target="_blank"><img src={github} alt="" /></a>
+          <a href="https://franppires.github.io/mini_portfolio_dev_em_dobro/" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={cadastro} alt="" />
+        <div>
+          <h3>Cadastro de dados </h3>
+          <a href="" target="_blank"><img src={github} alt="" /></a>
+          <a href="" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Cadastro e listagem de novos cadidatos, validação de   formulario e mascara de numero. </p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={formulario} alt="" />
+        <div>
+          <h3>Formulário</h3>
+          <a href="" target="_blank"><img src={github} alt="" /></a>
+          <a href="" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Validar campos do formulário para preenchimento. </p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={starbucks} alt="" />
+        <div>
+          <h3>Starbucks</h3>
+          <a href="" target="_blank"><img src={github} alt="" /></a>
+          <a href="" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Site clone do starbucks </p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
+      <CardProject>
+        <img src={produto} alt="" />
+        <div>
+          <h3>Visualização de produto </h3>
+          <a href="" target="_blank"><img src={github} alt="" /></a>
+          <a href="" target="_blank"><img src={link} alt="" /></a>
+        </div>
+        <p>Componente de cartão de visualização do produto </p>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>Javascript</li>
+        </ul>
+      </CardProject>
       </Card>
+      <Copyright />
     </>
   )
 }

@@ -18,31 +18,29 @@ import App from './App';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/inicio",
-        element: <Inicio /> 
-      },
-      {
-        path: "about",
-        element: <About /> 
-      },
-      {
-        path: "projects",
-        element: <Projects />
-      },
-      
-      {
-        path: "skills",
-        element: <Skills />
-      },
-      {
-        path: "contact",
-        element: <Data />
-      }
-    ]
-  }, 
+    element: <App />,    
+  },
+  {
+    path: "/inicio",
+    element: <Inicio /> 
+  },
+  {
+    path: "about",
+    element: <About /> 
+  },
+  {
+    path: "projects",
+    element: <Projects />
+  },
+  
+  {
+    path: "skills",
+    element: <Skills />
+  },
+  {
+    path: "contact",
+    element: <Data />
+  } 
 
 
  

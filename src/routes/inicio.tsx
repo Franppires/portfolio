@@ -22,12 +22,14 @@ import produto from "../assets/produto.svg"
 import formulario from "../assets/formulario.svg"
 import starbucks from "../assets/starbucks.svg"
 import { Card, CardProject, Contact, Gradient, Main, Technologies, Title } from "../styles/style"
-
+import Copyright from "./copyright"
+import Menu from "./menu"
 
 export default function Inicio() {
 
   return (
     <>
+      <Menu />
       <Main> 
         <span>Olá, eu sou</span>
         <Gradient>Franciane Pires</Gradient>
@@ -44,7 +46,6 @@ export default function Inicio() {
             <a href="https://github.com/Franppires/monica_magalhaes" target="_blank"><img src={github} alt="" /></a>
             <a href="https://monicamagalhaes.netlify.app" target="_blank"><img src={link} alt="" /></a>
           </div> 
-
           <p>Portfólio da UX Designer Mônica nele contem seus melhores trabalhos na área de designer, informações pessoais e contato.</p>
           <ul>
             <li>HTML</li>
@@ -87,7 +88,6 @@ export default function Inicio() {
             <a href="https://github.com/Franppires/lembrete_aniversario_front_beginners" target="_blank"><img src={github} alt="" /></a>
             <a href="https://lembretedeaniversario.netlify.app/" target="_blank"><img src={link} alt="" /></a>
           </div> 
-
           <p>Lista de aniversários e componente para redenrizar.</p>
           <ul>
             <li>React</li>
@@ -215,6 +215,7 @@ export default function Inicio() {
           </a>
         </button>
       </Contact> 
+      <Copyright />
     </>
   )
 }

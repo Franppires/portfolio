@@ -172,4 +172,25 @@ export const Footer = styled.div`
     position: relative;
     top: 50vh;
     bottom: 0;
+
+
+    nav { 
+        display: flex;
+        width: 90%;
+        justify-content: flex-end;
+        gap: 30px;
+        margin-right: 30px;
+    }
+
+    li { 
+        list-style: none;
+    } 
+
+    a {
+        text-decoration: none;
+        color: #FFFFFF;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
 `

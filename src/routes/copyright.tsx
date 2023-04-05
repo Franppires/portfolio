@@ -1,18 +1,15 @@
 import { Footer } from "../styles/style";
 
-
 export default function Copyright() {
-
-
     return (
         <>
             <Footer>
-                <div>
-                    <p>Desenvolvedora: Franciane Pires </p>
-                    <p> © 2023 - Todos os direitos reservados. </p>
-                </div>
-            </Footer> 
 
+                <nav>
+                    <li>Desenvolvedora Franciane Pires </li>
+                    <li>© 2023 - Todos os direitos reservados.</li>
+                </nav>
+            </Footer> 
         </>
-  )
+    )
 }
