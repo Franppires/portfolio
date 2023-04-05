@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Header = styled.div`
     width: 100%;
-    height: 123px;
+    height: 80px;
     display: flex;
     flex-direction: space-between;
     justify-content: center;
@@ -10,6 +10,11 @@ export const Header = styled.div`
     background-color: #111111;
     padding: 0 50px;
     position: fixed;
+    top: 0;
+
+    img { 
+        height: 100%;
+    }
 
     nav { 
         display: flex;
@@ -30,10 +35,6 @@ export const Header = styled.div`
         font-weight: bold;
     }
 
-    nav img { 
-        align-items: center;
-
-    }
 `
 
 export const Gradient = styled.h1`
@@ -52,7 +53,7 @@ export const Gradient = styled.h1`
 `
 
 export const Main = styled.div`
-    padding: 230px 50px 100px;
+    padding: 130px 50px 0;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -61,7 +62,7 @@ export const Main = styled.div`
 
 export const Title = styled.h2`
     padding: 0 50px;
-    margin-bottom: 50px;
+    margin: 100px 0 50px ;
 `
 export const Card = styled.div`
     display: flex;
@@ -141,7 +142,7 @@ export const Contact = styled.div`
     border-bottom: 1px solid  #FBF2B1;
     border-right: 1px solid  #6518B4;
     border-left: 1px solid  #D24074;
-    margin: 0px 0 50px 0;
+    margin: 0px 0 100px 0;
     }
 
     a { 
@@ -158,4 +159,17 @@ export const Contact = styled.div`
     color: #FFFFFF;
     }
 
+`
+export const Footer = styled.div`
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: space-between;
+    justify-content: center;
+    align-items: center;
+    background-color: #111111;
+    padding: 0 50px;
+    position: relative;
+    top: 50vh;
+    bottom: 0;
 `
