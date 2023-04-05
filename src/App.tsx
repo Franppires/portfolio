@@ -19,6 +19,10 @@ import controle_financeiro from "./assets/controle_financeiro.svg"
 import lembrete_aniversarios from "./assets/lembrete_aniversarios.svg"
 import tours from "./assets/tours.svg"
 import mini from "./assets/mini.svg"
+import cadastro from "./assets/cadastro.svg"
+import produto from "./assets/produto.svg"
+import formulario from "./assets/formulario.svg"
+import starbucks from "./assets/starbucks.svg"
 import { Card, CardProject, Contact, Gradient, Header, Main, Technologies, Title } from "./styles/style"
 
 
@@ -130,16 +134,59 @@ function App() {
           </ul>
         </CardProject>
         <CardProject>
-          <img src={mini} alt="" />
+          <img src={cadastro} alt="" />
           <div>
-            <h3>Controle Financeiro</h3>
-            <a href="https://github.com/Franppires/mini_portfolio_dev_em_dobro" target="_blank"><img src={github} alt="" /></a>
-            <a href="https://franppires.github.io/mini_portfolio_dev_em_dobro/" target="_blank"><img src={link} alt="" /></a>
+            <h3>Cadastro de dados </h3>
+            <a href="" target="_blank"><img src={github} alt="" /></a>
+            <a href="" target="_blank"><img src={link} alt="" /></a>
           </div>
-          <p>Sistema para cadastrar transação de compra e venda, listagem desses cadastros com total. </p>
+          <p>Cadastro e listagem de novos cadidatos, validação de   formulario e mascara de numero. </p>
           <ul>
             <li>HTML</li>
             <li>CSS</li>
+            <li>Javascript</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={formulario} alt="" />
+          <div>
+            <h3>Formulário</h3>
+            <a href="" target="_blank"><img src={github} alt="" /></a>
+            <a href="" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Validar campos do formulário para preenchimento. </p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Javascript</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={starbucks} alt="" />
+          <div>
+            <h3>Starbucks</h3>
+            <a href="" target="_blank"><img src={github} alt="" /></a>
+            <a href="" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Site clone do starbucks </p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Javascript</li>
+          </ul>
+        </CardProject>
+        <CardProject>
+          <img src={produto} alt="" />
+          <div>
+            <h3>Visualização de produto </h3>
+            <a href="" target="_blank"><img src={github} alt="" /></a>
+            <a href="" target="_blank"><img src={link} alt="" /></a>
+          </div>
+          <p>Componente de cartão de visualização do produto </p>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Javascript</li>
           </ul>
         </CardProject>
       </Card>
