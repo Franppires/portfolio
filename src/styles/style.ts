@@ -1,4 +1,7 @@
 import styled, { css } from "styled-components";
+import { DetailedHTMLProps, HTMLAttributes } from "react";
+
+
 
 export const Header = styled.div`
     width: 100%;
@@ -223,7 +226,12 @@ export const Footer = styled.div`
 
 `
 
-export const Container = styled.div`
+interface ContainerProps extends 
+DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+    menuIsVisible: boolean;
+  }
+
+export const Container = styled.div<ContainerProps>`
     position: absolute;
     backdrop-filter: blur(3px);
     width: 100%;
