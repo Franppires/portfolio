@@ -149,14 +149,6 @@ export const Technologies = styled.div`
     width: 8%;
     }
 
-    /* @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 5px;
-
-        img { 
-            width: 15%;
-        }
-    } */
 `
 export const Contact = styled.div`
     display: flex;
@@ -285,7 +277,7 @@ export const Container = styled.div`
     }
 
     
-    ${({ isOpen }) => isOpen && css`
+    ${({ menuIsVisible }) => menuIsVisible && css`
         opacity: 1;
         pointer-events: auto;
         transform: translateY(50);

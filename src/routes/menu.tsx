@@ -7,8 +7,8 @@ import { useState } from "react"
 
 export default function Menu() {
 
-  const [menuIsVisible, setMenuIsVisible] = useState()
-
+  const [menuIsVisible, setMenuIsVisible] = useState<boolean>(false)
+  
   return (
     <>
       <Mobile 
