@@ -44,9 +44,8 @@ export default function Projects() {
         </div>
         <p>Aplicação que simula o envio de dinheiro para uma outra pessoa, via cartão de crédito usando api. </p>
         <ul>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>Javascript</li>
+          <li>React</li>
+          <li>Styled Components</li>
         </ul>
       </CardProject>
       <CardProject>
