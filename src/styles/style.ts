@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Header = styled.div`
     width: 100%;
@@ -8,7 +8,7 @@ export const Header = styled.div`
     justify-content: center;
     align-items: center;
     background-color: #111111;
-    padding: 0 50px;
+    padding: 0 10px;
     position: fixed;
     top: 0;
 
@@ -21,7 +21,7 @@ export const Header = styled.div`
         width: 90%;
         justify-content: flex-end;
         gap: 30px;
-        margin-right: 30px;
+
     }
 
     li { 
@@ -33,6 +33,26 @@ export const Header = styled.div`
         color: #FFFFFF;
         font-size: 18px;
         font-weight: bold;
+    }
+
+    > svg {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+
+        {
+        justify-content: space-between;
+
+        }
+
+        nav {
+            display: none;
+        }
+
+        > svg {
+            display: flex;
+        }
     }
 
 `
@@ -53,21 +73,20 @@ export const Gradient = styled.h1`
 `
 
 export const Main = styled.div`
-    padding: 130px 50px 0;
+    padding: 130px 10px 0;
     display: flex;
     flex-direction: column;
     gap: 18px;
     font-size: 20px;
 `
-
 export const Title = styled.h2`
-    padding: 0 50px;
+    padding: 0 10px;
     margin: 100px 0 50px ;
 `
 export const Card = styled.div`
     display: flex;
     flex-wrap: wrap;
-    padding: 0 50px;
+    padding: 0 10px;
     gap: 10px;
 
     > div { 
@@ -77,7 +96,7 @@ export const Card = styled.div`
 export const CardProject = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
     
 
     img { 
@@ -119,20 +138,30 @@ export const CardProject = styled.div`
     }
 `
 export const Technologies = styled.div`
-    padding: 0 50px 35px;
+    padding: 0 10px 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 50px 0 50px 0;
+    width: 100%;
 
     img { 
-    width: 5%;
+    width: 8%;
     }
+
+    /* @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 5px;
+
+        img { 
+            width: 15%;
+        }
+    } */
 `
 export const Contact = styled.div`
     display: flex;
     justify-content: center;
-    padding: 0 50px;
+    padding: 0 10px;
 
     button {
     width: 30%;
@@ -158,6 +187,13 @@ export const Contact = styled.div`
     font-size: 16px;
     color: #FFFFFF;
     }
+    
+    @media (max-width: 768px) {
+        a { 
+            display: flex; 
+            flex-direction: column;
+        }
+    }
 
 `
 export const Footer = styled.div`
@@ -168,7 +204,7 @@ export const Footer = styled.div`
     justify-content: center;
     align-items: center;
     background-color: #111111;
-    padding: 0 50px;
+    padding: 0 10px;
     position: relative;
     top: 50vh;
     bottom: 0;
@@ -194,3 +230,74 @@ export const Footer = styled.div`
     }
 
 `
+
+export const Container = styled.div`
+    position: absolute;
+    backdrop-filter: blur(3px);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(152,69,232);
+    background: linear-gradient(0deg, rgba(152,69,232,1) 0%, rgba(17,17,17,1) 5%);
+    color: #FFFFFF;
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0);
+
+
+    transition: 0.5s;
+
+    > svg {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        transform: rotate(45deg);
+        transition: 0.7s;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 2rem;
+        top: 50%;
+        transform:  scale(0.7);
+        transition: 0.7s;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    a {
+        color: #FFFFFF;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    
+    ${({ isOpen }) => isOpen && css`
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(50);
+        overflow: hidden;
+
+        > svg {
+            transform: rotate(0deg);
+        }
+
+        nav { 
+            transform: scale(1);
+        }
+    `}
+`
+

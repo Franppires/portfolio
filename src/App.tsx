@@ -9,7 +9,7 @@ export default function App() {
   return (
 
     <>
-    <Menu />
+    {/* <Menu /> */}
     <Inicio />
 
     <Outlet />
