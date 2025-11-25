@@ -2,6 +2,12 @@ import React from 'react';
 import { Project, SkillCategory, SocialLink, Language } from './types';
 import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
+// Import local images so bundler includes them and paths work after deploy
+import cocreaneImg from './src/assets/cocreane.png';
+import bemEstarImg from './src/assets/bem-estar-acupuntura.png';
+import eloraImg from './src/assets/elora.png';
+import medicontrolImg from './src/assets/medicontrol.png';
+
 export const PORTFOLIO_OWNER = "Franciane Pires";
 export const GITHUB_USERNAME = "Franppires";
 export const PROFILE_IMAGE_URL = `https://github.com/${GITHUB_USERNAME}.png`;
@@ -108,7 +114,7 @@ export const PROJECTS_DATA: Record<Language, Project[]> = {
       title: "Cocreane",
       description: "A Cocreane cria websites e aplicações personalizadas, otimizadas para performance, engajamento e crescimento exponencial.",
       tags: ["React", "TypeScript", "TailwindCSS", "UI/UX", "Node.js"],
-      imageUrl: "src/assets/cocreane.png",
+      imageUrl: cocreaneImg,
       featured: true,
       link: "https://cocreane.vercel.app/"
     },
@@ -117,7 +123,7 @@ export const PROJECTS_DATA: Record<Language, Project[]> = {
       title: "Bem Estar Acupuntura",
       description: "Tratamentos personalizados de acupuntura e terapias integrativas para restaurar sua vitalidade.",
       tags: ["React", "TypeScript", "TailwindCSS", "Lucide React", "UI/UX", "Node.js"],
-      imageUrl: "src/assets/bem-estar-acupuntura.png",
+      imageUrl: bemEstarImg,
       link: "#"
     },
     {
@@ -125,7 +131,7 @@ export const PROJECTS_DATA: Record<Language, Project[]> = {
       title: "Elora Creative",
       description: "Posicionamento de marca que desejam sair da guerra de preços e se tornarem autoridade.",
       tags: ["React", "TypeScript", "TailwindCSS", "UI/UX"],
-      imageUrl: "/src/assets/elora.png",
+      imageUrl: eloraImg,
       link: "#"
     },
     {
@@ -133,7 +139,7 @@ export const PROJECTS_DATA: Record<Language, Project[]> = {
       title: "Medicontrol",
       description: "Aplicação desenvolvida para facilitar o controle de medicamentos de uso contínuo para famílias.",
       tags: ["React", "Figma", "UI/UX"],
-      imageUrl: "/src/assets/medicontrol.png",
+      imageUrl: medicontrolImg,
       link: "#"
     },
     
