@@ -18,6 +18,25 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              'vendor': ['react', 'react-dom'],
+              'google': ['@google/genai'],
+              'markdown': ['react-markdown', 'remark-gfm'],
+            }
+          }
+        },
+        chunkSizeWarningLimit: 1000,
+        minify: 'terser',
+        terserOptions: {
+          compress: {
+            drop_console: false,
+            drop_debugger: true
+          }
+        }
       }
     };
 });

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#6d28d9"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <filter id="f" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="20" result="b" />
+      <feBlend in="SourceGraphic" in2="b" />
+    </filter>
+  </defs>
+  <rect width="1200" height="300" fill="#0f172a" />
+  <g filter="url(#f)">
+    <circle cx="220" cy="80" r="120" fill="url(#g)" opacity="0.35" />
+    <circle cx="980" cy="220" r="160" fill="#ec4899" opacity="0.18" />
+  </g>
+  <g transform="translate(60,40)">
+    <text x="0" y="80" font-family="Inter, Arial, Helvetica, sans-serif" font-size="56" font-weight="700" fill="#ffffff">Franciane Pires</text>
+    <text x="0" y="130" font-family="Inter, Arial, Helvetica, sans-serif" font-size="22" fill="#c7d2fe">Software Developer • Frontend & Full‑Stack</text>
+    <rect x="0" y="160" width="420" height="2" fill="#8b5cf6" opacity="0.9" />
+    <text x="0" y="210" font-family="Inter, Arial, Helvetica, sans-serif" font-size="16" fill="#94a3b8">Portfólio pessoal — React, TypeScript, Tailwind, Gemini AI</text>
+  </g>
+</svg>
