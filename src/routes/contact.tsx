@@ -25,7 +25,7 @@ export default function Data() {
             </a>
             </button>
             <button>
-            <a href="https://contate.me/franppires" target="_blank">
+            <a href="https://wa.me/5514998098786" target="_blank">
                 <img src={whatsapp} alt="" />
                 <p>Whatsapp</p>
             </a>

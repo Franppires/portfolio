@@ -1,5 +1,7 @@
 import React from 'react';
 
+export type Language = 'pt' | 'en';
+
 export interface Project {
   id: string;
   title: string;
@@ -12,9 +14,12 @@ export interface Project {
 
 export interface Skill {
   name: string;
-  level: number; // 0-100
   icon: string; // Emoji or icon name
-  category: 'frontend' | 'backend' | 'tools' | 'design';
+}
+
+export interface SkillCategory {
+  title: string; // We will treat this as a key or keep it English/PT based on data
+  skills: Skill[];
 }
 
 export interface ChatMessage {
