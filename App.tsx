@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Navbar from './components/Navbar';
 import ContactForm from './components/ContactForm';
 import HeroShowcase from './components/HeroShowcase';
@@ -36,7 +36,7 @@ function App() {
   const t = TRANSLATIONS[language];
   const p = PAGE[language];
   const cases = getCases(language);
-  const work = getWork(language).filter((w) => filter === 'all' || w.category === filter);
+  const work = useMemo(() => getWork(language).filter((w) => filter === 'all' || w.category === filter), [language, filter]);
   const lab = getLab(language);
   const stack = SKILL_CATEGORIES_DATA[language].flatMap((c) => c.skills.map((s) => s.name)).filter((n, i, a) => STACK_KEEP.includes(n) && a.indexOf(n) === i);
 
