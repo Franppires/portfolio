@@ -6,6 +6,7 @@ import Typewriter from './components/Typewriter';
 import ResultsPanel from './components/ResultsPanel';
 import CasesPinned from './components/CasesPinned';
 import WorkGallery from './components/WorkGallery';
+import FreeAudit from './components/FreeAudit';
 import { useSmoothScroll, useMagnetic, useSpotlight, CursorLabel, gsap, ScrollTrigger, prefersReduced } from './components/motion';
 import { SplitText } from 'gsap/SplitText';
 import {
@@ -20,12 +21,14 @@ import {
 } from './constants';
 import { PAGE, CLIENT_NAMES, getCases, getWork, getLab, WorkCategory } from './content';
 import { Language } from './types';
-import { ArrowRight, ArrowUpRight, Check, MessageCircle, Plus, ShieldCheck, Mail, Layout, ShoppingBag, MousePointerClick } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, MessageCircle, Plus, ShieldCheck, Mail, Layout, ShoppingBag, MousePointerClick, Stethoscope, Briefcase, MapPin, MessagesSquare, Megaphone, Server, Award } from 'lucide-react';
 
 gsap.registerPlugin(SplitText);
 
 const FILTERS: Array<'all' | WorkCategory> = ['all', 'loja', 'site', 'landing', 'ferramenta'];
 const SERVICE_ICONS = [Layout, ShoppingBag, MousePointerClick];
+const AUDIENCE_ICONS = [Stethoscope, ShoppingBag, Briefcase, MapPin];
+const WHY_ICONS = [MessagesSquare, Megaphone, Server, Award];
 const STACK_KEEP = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Node.js', 'PHP', 'WordPress', 'MySQL', 'Firebase', 'WHM / cPanel', 'Cloudflare'];
 
 function App() {
@@ -189,6 +192,9 @@ function App() {
         {/* 2. Painel de resultados */}
         <ResultsPanel labels={p.results} />
 
+        {/* Diagnóstico gratuito */}
+        <FreeAudit labels={p.audit} phone="5514998098786" />
+
         {/* 3. Cases */}
         <CasesPinned cases={cases} labels={p.cases} agencyTag={p.work.agencyTag} />
 
@@ -216,6 +222,28 @@ function App() {
               <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noreferrer" className="text-muted hover:text-ink inline-flex items-center gap-1 shrink-0">
                 GitHub <ArrowUpRight size={13} />
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Para quem eu crio */}
+        <section className="py-24 md:py-28 border-t border-line">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-12">
+              <p className="text-[11px] uppercase tracking-widest text-accent mb-3">{p.audience.kicker}</p>
+              <h2 className="split-title text-3xl md:text-5xl font-medium tracking-tighter text-ink max-w-3xl">{p.audience.title}</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {p.audience.items.map((it, idx) => {
+                const Icon = AUDIENCE_ICONS[idx % AUDIENCE_ICONS.length];
+                return (
+                  <div key={it.title} className="reveal bento-card spotlight p-6 md:p-7">
+                    <span className="w-11 h-11 rounded-xl border border-line bg-paper flex items-center justify-center text-accent mb-5"><Icon size={20} /></span>
+                    <h3 className="text-lg font-medium text-ink">{it.title}</h3>
+                    <p className="text-sm text-muted leading-relaxed mt-2">{it.text}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -273,6 +301,31 @@ function App() {
                   ))}
                 </ol>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Por que trabalhar comigo */}
+        <section className="py-24 md:py-32 border-t border-line">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            <div className="lg:col-span-5 lg:sticky lg:top-28">
+              <p className="text-[11px] uppercase tracking-widest text-accent mb-3">{p.why.kicker}</p>
+              <h2 className="split-title text-3xl md:text-5xl font-medium tracking-tighter text-ink">{p.why.title}</h2>
+              <a href={WHATSAPP} target="_blank" rel="noreferrer" className="btn-glow magnetic mt-8">
+                <MessageCircle size={16} /> {p.why.cta}
+              </a>
+            </div>
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {p.why.items.map((it, idx) => {
+                const Icon = WHY_ICONS[idx % WHY_ICONS.length];
+                return (
+                  <div key={it.title} className="reveal bento-card spotlight p-6 md:p-7">
+                    <span className="w-11 h-11 rounded-xl border border-line bg-paper flex items-center justify-center text-accent mb-5"><Icon size={20} /></span>
+                    <h3 className="text-lg font-medium text-ink">{it.title}</h3>
+                    <p className="text-sm text-muted leading-relaxed mt-2">{it.text}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -336,7 +389,10 @@ function App() {
               </div>
               <div className="reveal lg:col-span-8 border-b border-line">
                 {p.faq.items.map((item) => (
-                  <details key={item.q} className="group border-t border-line">
+                  <details key={item.q} name="faq" className="group border-t border-line" onToggle={(e) => {
+                    const el = e.currentTarget;
+                    if (el.open) el.parentElement?.querySelectorAll('details[open]').forEach((d) => { if (d !== el) (d as HTMLDetailsElement).open = false; });
+                  }}>
                     <summary className="flex items-center justify-between gap-6 py-6 cursor-pointer list-none text-base md:text-lg font-medium text-ink">
                       {item.q}
                       <Plus size={18} className="shrink-0 text-accent transition-transform duration-300 group-open:rotate-45" />
@@ -350,7 +406,7 @@ function App() {
             <div className="cta-block relative overflow-hidden mt-24 rounded-3xl border border-line p-8 md:p-14 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
               <div className="cta-glow" aria-hidden="true" />
               <div className="relative lg:col-span-5">
-                <h2 className="split-title text-3xl md:text-6xl font-medium tracking-tighter leading-[1.02] text-ink">{p.contact.title}</h2>
+                <h2 className="split-title text-3xl md:text-[2.75rem] lg:text-5xl font-medium tracking-tighter leading-[1.05] text-ink">{p.contact.title}</h2>
                 <p className="mt-5 text-muted leading-relaxed">{p.contact.desc}</p>
                 <a href={WHATSAPP} target="_blank" rel="noreferrer" className="btn-whatsapp magnetic mt-8">
                   <MessageCircle size={18} /> {p.contact.whatsapp}

@@ -28,7 +28,7 @@ export const PORTFOLIO_OWNER = "Franciane Paiva Pires";
 export const GITHUB_USERNAME = "Franppires";
 export const PROFILE_IMAGE_URL = `https://github.com/${GITHUB_USERNAME}.png`;
 export const EMAIL = "contatofranpires@gmail.com";
-export const WHATSAPP = "https://wa.me/5514998098786"
+export const WHATSAPP = `https://wa.me/5514998098786?text=${encodeURIComponent("Olá, Franciane! Vim pelo seu portfólio e quero saber mais sobre um site para o meu negócio.")}`;
 
 // Socials are language agnostic
 export const SOCIALS: SocialLink[] = [
@@ -544,7 +544,7 @@ export const TRANSLATIONS = {
     buttons: {
       projects: "Ver projetos",
       cv: "Contato",
-      send: "Enviar Mensagem",
+      send: "Quero meu orçamento",
       sending: "Enviando...",
       sendAnother: "Enviar outra mensagem",
       viewRepos: "Ver todos os repositórios",
@@ -582,13 +582,13 @@ export const TRANSLATIONS = {
       subject: "Assunto",
       message: "Mensagem",
       placeholders: {
-        name: "Seu nome",
+        name: "Como posso te chamar?",
         email: "seu@email.com",
-        subject: "Sobre o que vamos conversar?",
-        message: "Conte-me mais sobre seu projeto..."
+        subject: "Ex.: site para minha clínica",
+        message: "Conte um pouco sobre o seu negócio e o que você precisa..."
       },
-      successTitle: "Mensagem Enviada!",
-      successDesc: "Obrigado pelo contato. Retornarei sua mensagem o mais breve possível.",
+      successTitle: "Mensagem recebida!",
+      successDesc: "Obrigada pelo contato! Já estou lendo e respondo em até 1 dia útil.",
       error: "Ocorreu um erro ao enviar. Tente novamente.",
       validation: "Por favor, preencha todos os campos obrigatórios."
     },
@@ -622,7 +622,7 @@ export const TRANSLATIONS = {
     buttons: {
       projects: "View projects",
       cv: "Contact",
-      send: "Send Message",
+      send: "Get my quote",
       sending: "Sending...",
       sendAnother: "Send another message",
       viewRepos: "View all repositories",
@@ -660,13 +660,13 @@ export const TRANSLATIONS = {
       subject: "Subject",
       message: "Message",
       placeholders: {
-        name: "Your name",
+        name: "What should I call you?",
         email: "you@email.com",
-        subject: "What shall we talk about?",
-        message: "Tell me more about your project..."
+        subject: "E.g. a website for my clinic",
+        message: "Tell me a bit about your business and what you need..."
       },
-      successTitle: "Message Sent!",
-      successDesc: "Thanks for reaching out. I'll get back to you as soon as possible.",
+      successTitle: "Message received!",
+      successDesc: "Thanks for reaching out! I'm already reading it and will reply within 1 business day.",
       error: "An error occurred. Please try again.",
       validation: "Please fill in all required fields."
     },
