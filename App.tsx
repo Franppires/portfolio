@@ -1,419 +1,404 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
-import ProjectCard from './components/ProjectCard';
-const AIChat = lazy(() => import('./components/AIChat'));
 import ContactForm from './components/ContactForm';
-import { 
-  PROJECTS_DATA, 
-  SKILL_CATEGORIES_DATA, 
-  ALL_SKILLS, 
-  SOCIALS, 
-  PORTFOLIO_OWNER, 
-  PROFILE_IMAGE_URL, 
-  TRANSLATIONS 
+import HeroShowcase from './components/HeroShowcase';
+import Typewriter from './components/Typewriter';
+import ResultsPanel from './components/ResultsPanel';
+import CasesPinned from './components/CasesPinned';
+import WorkGallery from './components/WorkGallery';
+import { useSmoothScroll, useMagnetic, useSpotlight, CursorLabel, gsap, ScrollTrigger, prefersReduced } from './components/motion';
+import { SplitText } from 'gsap/SplitText';
+import {
+  SKILL_CATEGORIES_DATA,
+  SOCIALS,
+  PORTFOLIO_OWNER,
+  PROFILE_IMAGE_URL,
+  TRANSLATIONS,
+  WHATSAPP,
+  EMAIL,
+  GITHUB_USERNAME,
 } from './constants';
+import { PAGE, CLIENT_NAMES, getCases, getWork, getLab, WorkCategory } from './content';
 import { Language } from './types';
-import { ArrowDown, Mail, Sparkles, MapPin, ExternalLink, Download } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, MessageCircle, Plus, ShieldCheck, Mail, Layout, ShoppingBag, MousePointerClick } from 'lucide-react';
+
+gsap.registerPlugin(SplitText);
+
+const FILTERS: Array<'all' | WorkCategory> = ['all', 'loja', 'site', 'landing', 'ferramenta'];
+const SERVICE_ICONS = [Layout, ShoppingBag, MousePointerClick];
+const STACK_KEEP = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Node.js', 'PHP', 'WordPress', 'MySQL', 'Firebase', 'WHM / cPanel', 'Cloudflare'];
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [cursorVariant, setCursorVariant] = useState("default");
-  
-  // Language State
   const [language, setLanguage] = useState<Language>('pt');
-  
-  // Derived Data based on language
+  const [filter, setFilter] = useState<'all' | WorkCategory>('all');
+  const pageRef = useRef<HTMLDivElement>(null);
+
   const t = TRANSLATIONS[language];
-  const currentProjects = PROJECTS_DATA[language];
-  const currentSkills = SKILL_CATEGORIES_DATA[language];
-  
-  // Refs for smooth cursor animation
-  const cursorDotRef = useRef<HTMLDivElement>(null);
-  const cursorOutlineRef = useRef<HTMLDivElement>(null);
-  const requestRef = useRef<number | null>(null);
+  const p = PAGE[language];
+  const cases = getCases(language);
+  const work = getWork(language).filter((w) => filter === 'all' || w.category === filter);
+  const lab = getLab(language);
+  const stack = SKILL_CATEGORIES_DATA[language].flatMap((c) => c.skills.map((s) => s.name)).filter((n, i, a) => STACK_KEEP.includes(n) && a.indexOf(n) === i);
 
-  // Preloader Logic
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  useSmoothScroll();
+  useMagnetic();
+  useSpotlight();
 
-  // Cursor Logic
+  // Animações de entrada e de rolagem.
   useEffect(() => {
-    const mouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-      
-      // Direct update for dot (instant)
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.left = `${e.clientX}px`;
-        cursorDotRef.current.style.top = `${e.clientY}px`;
+    const reduced = prefersReduced();
+    const ctx = gsap.context(() => {
+      if (reduced) {
+        gsap.set('.reveal', { opacity: 1, y: 0 });
+        return;
       }
-    };
 
-    window.addEventListener("mousemove", mouseMove);
+      // Topo: entra em sequência.
+      gsap.from('.hero-in', { y: 40, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.15 });
 
-    // Smooth follow for outline
-    const animateOutline = () => {
-      if (cursorOutlineRef.current) {
-        const outline = cursorOutlineRef.current;
-        const currentX = parseFloat(outline.style.left || "0");
-        const currentY = parseFloat(outline.style.top || "0");
-        
-        const dx = mousePosition.x - currentX;
-        const dy = mousePosition.y - currentY;
-        
-        // Lerp for smooth delay
-        outline.style.left = `${currentX + dx * 0.15}px`;
-        outline.style.top = `${currentY + dy * 0.15}px`;
-        
-        // Apply expanding class based on variant
-        if (cursorVariant === "hover") {
-           document.body.classList.add('hovering');
-        } else {
-           document.body.classList.remove('hovering');
-        }
+      // Títulos de seção: palavras sobem de trás de uma máscara.
+      document.querySelectorAll<HTMLElement>('.split-title').forEach((el) => {
+        SplitText.create(el, {
+          type: 'words,lines',
+          mask: 'lines',
+          autoSplit: true, // refaz a divisão quando a fonte carrega ou a tela muda
+          onSplit: (self) => gsap.from(self.words, {
+            yPercent: 110, duration: 0.9, ease: 'power4.out', stagger: 0.04,
+            scrollTrigger: { trigger: el, start: 'top 85%' },
+          }),
+        });
+      });
+
+      // Blocos genéricos.
+      ScrollTrigger.batch('.reveal', {
+        start: 'top 88%',
+        onEnter: (els) => gsap.fromTo(els, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true }),
+      });
+
+      // Linha do processo se desenhando com a rolagem.
+      const process = document.querySelector('.process-track');
+      if (process) {
+        const steps = gsap.utils.toArray<HTMLElement>('.process-step');
+        const mm = gsap.matchMedia();
+        // Computador: linha horizontal; as etapas acendem em sequência.
+        mm.add('(min-width: 768px)', () => {
+          gsap.fromTo('.process-line-fill', { scaleX: 0, scaleY: 1 }, {
+            scaleX: 1, ease: 'none',
+            scrollTrigger: { trigger: process, start: 'top 75%', end: 'bottom 45%', scrub: 0.6 },
+          });
+          steps.forEach((step, i) => ScrollTrigger.create({
+            trigger: process,
+            start: () => `top+=${(i / steps.length) * 200} 75%`,
+            onEnter: () => step.classList.add('is-lit'),
+            onLeaveBack: () => step.classList.remove('is-lit'),
+          }));
+        });
+        // Celular: linha vertical que desce; cada etapa acende quando chega nela.
+        mm.add('(max-width: 767px)', () => {
+          gsap.fromTo('.process-line-fill', { scaleY: 0, scaleX: 1 }, {
+            scaleY: 1, ease: 'none',
+            scrollTrigger: { trigger: process, start: 'top 70%', end: 'bottom 70%', scrub: 0.4 },
+          });
+          steps.forEach((step) => ScrollTrigger.create({
+            trigger: step,
+            start: 'top 70%',
+            onEnter: () => step.classList.add('is-lit'),
+            onLeaveBack: () => step.classList.remove('is-lit'),
+          }));
+        });
       }
-      requestRef.current = requestAnimationFrame(animateOutline);
-    };
-    requestRef.current = requestAnimationFrame(animateOutline);
 
-    // Add hover listeners to interactive elements
-    const addHoverListeners = () => {
-      const interactiveElements = document.querySelectorAll('a, button, input, textarea, .project-card');
-      interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => setCursorVariant("hover"));
-        el.addEventListener('mouseleave', () => setCursorVariant("default"));
+      // Contato: o bloco cresce ao entrar.
+      gsap.from('.cta-block', {
+        scale: 0.94, borderRadius: 48, ease: 'none',
+        scrollTrigger: { trigger: '.cta-block', start: 'top bottom', end: 'top 55%', scrub: 0.6 },
       });
-    };
+    }, pageRef);
 
-    // Wait for loading to finish then add listeners
-    if (!loading) {
-      setTimeout(addHoverListeners, 500);
-    }
+    const refresh = window.setTimeout(() => ScrollTrigger.refresh(), 600);
+    return () => { window.clearTimeout(refresh); ctx.revert(); };
+  }, [language]);
 
-    return () => {
-      window.removeEventListener("mousemove", mouseMove);
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    };
-  }, [mousePosition, cursorVariant, loading]);
-
-
-  // Scroll Reveal Observer
-  useEffect(() => {
-    if (loading) return;
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    const reveals = document.querySelectorAll('.reveal');
-    reveals.forEach(el => observer.observe(el));
-
-    return () => reveals.forEach(el => observer.unobserve(el));
-  }, [loading]);
-
-  // Double the skills for seamless marquee loop
-  const marqueeSkills = [...ALL_SKILLS, ...ALL_SKILLS];
+  const filterChips = (
+    <div className="flex flex-wrap gap-2" role="tablist">
+      {FILTERS.map((f) => (
+        <button
+          key={f}
+          type="button"
+          role="tab"
+          aria-selected={filter === f}
+          onClick={() => setFilter(f)}
+          className={`filter-chip ${filter === f ? 'is-active' : ''}`}
+        >
+          {p.work.filters[f]}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-dark text-slate-200 font-sans relative selection:bg-indigo-500/30 overflow-x-hidden">
-      
-      {/* Custom Cursor Elements */}
-      <div ref={cursorDotRef} className="cursor-dot hidden md:block"></div>
-      <div ref={cursorOutlineRef} className="cursor-outline hidden md:block"></div>
-
-      {/* Preloader */}
-      <div className={`preloader ${!loading ? 'loaded' : ''}`}>
-        <div className="flex flex-col items-center gap-4">
-          <div className="text-4xl md:text-6xl font-display font-bold text-white tracking-tighter animate-pulse">
-            FRAN<span className="text-indigo-500">.</span>
-          </div>
-          <div className="w-48 h-1 bg-slate-800 rounded-full overflow-hidden">
-            <div className="h-full bg-indigo-500 animate-[shimmer_1s_infinite]" style={{ width: '50%' }}></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Dynamic Background */}
-      <div 
-        className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300"
-        style={{
-          background: `radial-gradient(800px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99,102,241,0.07), transparent 40%)`
-        }}
-      />
-      {/* Noise Overlay */}
-      <div className="bg-noise"></div>
-      
-      <div className="fixed inset-0 bg-grid-white/[0.02] bg-[length:60px_60px] pointer-events-none z-0"></div>
-      
-      {/* Ambient Orbs - Animated Blobs */}
-      <div className="fixed top-0 left-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-[128px] pointer-events-none mix-blend-screen animate-blob"></div>
-      <div className="fixed top-0 right-0 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px] pointer-events-none mix-blend-screen animate-blob" style={{ animationDelay: '2s' }}></div>
-      <div className="fixed bottom-0 left-20 w-96 h-96 bg-pink-600/20 rounded-full blur-[128px] pointer-events-none mix-blend-screen animate-blob" style={{ animationDelay: '4s' }}></div>
-
-
+    <div ref={pageRef} className="min-h-screen bg-paper text-ink font-sans relative overflow-x-clip">
+      <div className="grain" aria-hidden="true" />
+      <CursorLabel />
       <Navbar language={language} setLanguage={setLanguage} texts={t.nav} />
 
-      <main className="relative z-10">
-        
-        {/* Hero Section */}
-        <section id="home" className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden pt-24">
-          <div className="max-w-7xl mx-auto w-full grid md:grid-cols-12 gap-12 items-center">
-            
-            {/* Left Column: Text */}
-            <div className="md:col-span-8 flex flex-col items-start z-10 order-2 md:order-1">
-              <div>
-                <div className="reveal animate-fade-in-up delay-100">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-xs font-bold uppercase tracking-wider backdrop-blur-md mb-8 hover:bg-white/10 transition-colors cursor-default">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                    </span>
-                    {t.available}
-                  </div>
-                </div>
-                
-                <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold tracking-tighter leading-[0.95] text-white mb-6 overflow-hidden">
-                   <span className="block overflow-hidden">
-                     <span className="block animate-reveal-text" style={{ animationDelay: '0.1s' }}>Software</span>
-                   </span>
-                   <span className="block overflow-hidden mt-1">
-                     <span className="block animate-reveal-text glitch" data-text="Developer" style={{ animationDelay: '0.3s' }}>Developer</span>
-                   </span>
-                </h1>
-                
-                <div className="reveal animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-                  <p className="text-lg md:text-2xl text-indigo-400 font-medium mb-2">
-                    React, Next.js, JavaScript & TypeScript
-                  </p>
-                  <p className="text-base md:text-lg text-slate-400 max-w-2xl leading-relaxed mb-10 font-light">
-                    {t.heroDesc}
-                  </p>
+      <main>
+        {/* 1. Topo */}
+        <section id="home" className="hero relative min-h-[min(100svh,980px)] flex flex-col overflow-hidden">
+          <div className="hero-grid" aria-hidden="true" />
+          <div className="hero-glow" aria-hidden="true" />
+          <HeroShowcase />
+          <div className="hero-fade" />
 
-                  <div className="flex flex-wrap gap-6">
-                    <a href="#projects" className="group relative px-8 py-4 bg-white text-dark font-bold text-lg rounded-full overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                      <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-indigo-200/50 to-transparent -translate-x-full group-hover:animate-[shimmer_1s_infinite]"></div>
-                      <span className="relative flex items-center gap-2">{t.buttons.projects} <ArrowDown size={20} className="-rotate-90 group-hover:rotate-0 transition-transform duration-300" /></span>
-                    </a>
-                    <a href="#contact" className="px-8 py-4 bg-transparent border border-white/20 text-white font-medium text-lg rounded-full hover:bg-white/5 transition-all hover:border-white/40 backdrop-blur-sm flex items-center gap-2 group">
-                      <Download size={20} className="group-hover:translate-y-1 transition-transform" /> {t.buttons.cv}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Profile Card (3D Floating) */}
-            <div className="md:col-span-4 flex justify-center md:justify-end order-1 md:order-2 reveal delay-300">
-               <div className="relative w-72 h-96 md:w-80 md:h-[450px] glass-card rounded-[2rem] p-6 flex flex-col items-center justify-between border border-white/10 shadow-2xl animate-float hover:animation-pause transition-transform duration-500 group">
-                  
-                  {/* Background Pattern inside card */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-transparent to-purple-500/20 rounded-[2rem] pointer-events-none opacity-50"></div>
-                  
-                  {/* Avatar */}
-                  <div className="relative mt-6 mb-6 group-hover:scale-105 transition-transform duration-500">
-                    <div className="absolute inset-0 bg-indigo-500 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                    <img src={PROFILE_IMAGE_URL} alt="Profile" className="relative w-32 h-32 rounded-full object-cover border-2 border-white/20 shadow-2xl bg-slate-800" />
-                    <div className="absolute bottom-0 right-0 bg-dark border border-white/10 p-2 rounded-full">
-                       <Sparkles size={16} className="text-yellow-400" fill="currentColor" />
-                    </div>
-                  </div>
-
-                  <div className="text-center w-full relative z-10 mb-4">
-                     <h3 className="text-2xl font-bold text-white mb-1">{PORTFOLIO_OWNER}</h3>
-                     <p className="text-indigo-300 font-mono text-sm">{t.role}</p>
-                  </div>
-
-                  <div className="w-full bg-black/40 rounded-xl p-4 backdrop-blur-md border border-white/5 group-hover:border-indigo-500/30 transition-colors">
-                     <div className="flex items-center justify-between text-sm text-slate-400 mb-3">
-                        <span className="flex items-center gap-2"><MapPin size={14} /> {t.location}</span>
-                        <span className="text-white font-mono">GMT-3</span>
-                     </div>
-                     <div className="flex justify-between items-center pt-3 border-t border-white/10">
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-slate-500">{t.titles.stack}</span>
-                        <div className="flex -space-x-2">
-                           <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px]">TS</div>
-                           <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px]">R</div>
-                           <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px]">+</div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* Infinite Skills Marquee */}
-        <div className="w-full py-10 bg-dark border-y border-white/5 overflow-hidden relative z-20">
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-dark to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-dark to-transparent z-10 pointer-events-none"></div>
-          
-          <div className="flex w-[200%] animate-scroll hover:[animation-play-state:paused]">
-            {marqueeSkills.map((skill, index) => (
-              <div key={`${skill.name}-${index}`} className="flex items-center gap-4 mx-8 px-6 py-3 rounded-full border border-white/5 bg-white/[0.02] backdrop-blur-sm transition-all hover:bg-white/10 hover:scale-105 cursor-default group">
-                <span className="text-2xl group-hover:scale-125 transition-transform duration-300">{skill.icon}</span>
-                <span className="text-slate-300 font-display font-medium text-lg whitespace-nowrap">{skill.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Projects Section */}
-        <section id="projects" className="py-40 px-6 relative">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-24 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
-              <div>
-                <h2 className="text-5xl md:text-7xl font-display font-bold text-white mb-6">
-                  {t.titles.selectedWorks} <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{t.titles.selectedWorksHighlight}</span>
-                </h2>
-                <div className="h-1 w-24 bg-indigo-500 rounded-full"></div>
-              </div>
-              <p className="text-slate-400 text-lg max-w-md leading-relaxed md:text-right">
-                {t.subtitles.selectedWorks}
+          <div className="relative z-10 flex-1 flex items-center max-w-7xl w-full mx-auto px-6 pt-28 pb-16">
+            <div className="max-w-3xl">
+              <h1 className="hero-in text-[2.4rem] leading-[1.04] sm:text-6xl lg:text-[4.6rem] lg:leading-[1] font-medium tracking-tighter text-ink mb-8">
+                {p.hero.titlePre}{' '}
+                <Typewriter key={language} words={p.hero.words} className="text-gradient" startDelay={1200} />
+                <span className="block text-muted text-[0.6em] tracking-tight mt-3">{p.hero.titlePost}</span>
+              </h1>
+              <p className="hero-in text-base md:text-lg text-muted max-w-xl leading-relaxed mb-10">
+                {p.hero.desc}
               </p>
+              <div className="hero-in flex flex-wrap gap-3">
+                <a href={WHATSAPP} target="_blank" rel="noreferrer" className="btn-glow magnetic">
+                  <MessageCircle size={16} /> {p.hero.primary}
+                </a>
+                <a href="#work" className="btn-ghost magnetic">
+                  {p.hero.secondary} <ArrowRight size={16} />
+                </a>
+              </div>
             </div>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[550px]">
-              {currentProjects[0] && (
-                <div className="md:col-span-2 md:row-span-1 reveal project-card">
-                  <ProjectCard project={currentProjects[0]} className="h-full" />
-                </div>
-              )}
-              
-              {currentProjects.slice(1).map((project, idx) => (
-                <div key={project.id} className="reveal project-card" style={{ transitionDelay: `${(idx + 1) * 150}ms` }}>
-                   <ProjectCard project={project} className="h-full" />
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-16 text-center reveal">
-               <a href="https://github.com/Franppires" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-slate-400 hover:text-white border-b border-transparent hover:border-white transition-all pb-1">
-                  {t.buttons.viewRepos} <ExternalLink size={16} />
-               </a>
+          <div className="relative z-10 border-t border-line py-7">
+            <p className="max-w-7xl mx-auto px-6 text-[11px] uppercase tracking-widest text-muted mb-4">{p.hero.clients}</p>
+            <div className="marquee">
+              <ul className="marquee-track">
+                {[...CLIENT_NAMES, ...CLIENT_NAMES].map((name, i) => (
+                  <li key={i} className="flex items-center text-xl md:text-2xl font-medium tracking-tight text-ink opacity-50 hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <span className="px-8 md:px-12">{name}</span>
+                    <span className="text-accent opacity-70">✦</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
 
-        {/* Skills / Expertise Section */}
-        <section id="skills" className="py-32 px-6 relative bg-surface/30">
-           <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:40px_40px] pointer-events-none"></div>
-           
-           <div className="max-w-6xl mx-auto relative z-10">
-              <div className="text-center mb-20 reveal">
-                 <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-white">{t.titles.expertise}</h2>
-                 <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-                    {t.subtitles.expertise}
-                 </p>
-              </div>
+        {/* 2. Painel de resultados */}
+        <ResultsPanel labels={p.results} />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {currentSkills.map((category, idx) => (
-                     <div key={category.title} className="bg-slate-900/40 border border-white/5 rounded-3xl p-8 backdrop-blur-sm hover:border-indigo-500/20 transition-colors reveal" style={{ transitionDelay: `${idx * 100}ms` }}>
-                        <h3 className="text-2xl font-display font-bold text-white mb-6 flex items-center gap-3">
-                           {category.title.includes("Frontend") && "🎨"}
-                           {category.title.includes("Backend") && "⚙️"}
-                           {(category.title.includes("Banco de Dados") || category.title.includes("Database")) && "🗄️"}
-                           {(category.title.includes("Hospedagem") || category.title.includes("Infrastructure")) && "☁️"}
-                           {category.title}
-                        </h3>
-                        <div className="flex flex-wrap gap-3">
-                           {category.skills.map(skill => (
-                              <div key={skill.name} className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5 rounded-full hover:bg-white/10 hover:border-indigo-500/30 transition-all cursor-default group">
-                                 <span className="text-lg group-hover:scale-110 transition-transform">{skill.icon}</span>
-                                 <span className="text-slate-300 text-sm font-medium">{skill.name}</span>
-                              </div>
-                           ))}
-                        </div>
-                     </div>
+        {/* 3. Cases */}
+        <CasesPinned cases={cases} labels={p.cases} agencyTag={p.work.agencyTag} />
+
+        {/* 4. Mais trabalhos */}
+        <WorkGallery title={p.work.title} items={work} filters={filterChips} cursorLabel={p.work.cursor} agencyTag={p.work.agencyTag} agencyNote={p.work.agencyNote} swipeHint={p.work.swipe} />
+
+        {/* Laboratório (linha discreta) */}
+        <section className="pb-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="reveal flex flex-col md:flex-row md:items-center gap-3 md:gap-6 border-y border-line py-6 text-sm">
+              <span className="text-muted shrink-0">{p.lab.title}</span>
+              <ul className="flex flex-wrap gap-x-5 gap-y-2 flex-1">
+                {lab.map((item) => (
+                  <li key={item.id}>
+                    {item.link ? (
+                      <a href={item.link} target="_blank" rel="noreferrer" className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1">
+                        {item.title} <ArrowUpRight size={13} className="opacity-60" />
+                      </a>
+                    ) : (
+                      <span className="text-ink opacity-80">{item.title}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noreferrer" className="text-muted hover:text-ink inline-flex items-center gap-1 shrink-0">
+                GitHub <ArrowUpRight size={13} />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. Serviços + processo */}
+        <section id="services" className="py-24 md:py-32 border-t border-line">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-14">
+              <p className="text-[11px] uppercase tracking-widest text-accent mb-3">{p.services.kicker}</p>
+              <h2 className="split-title text-3xl md:text-6xl font-medium tracking-tighter text-ink max-w-3xl">{p.services.title}</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {p.services.items.map((s, idx) => {
+                const Icon = SERVICE_ICONS[idx];
+                return (
+                  <div key={s.title} className="reveal bento-card spotlight flex flex-col p-7 md:p-8">
+                    <span className="w-11 h-11 rounded-xl border border-line flex items-center justify-center text-accent mb-6 bg-paper">
+                      <Icon size={20} />
+                    </span>
+                    <h3 className="text-xl font-medium text-ink">{s.title}</h3>
+                    <p className="text-sm text-muted leading-relaxed mt-2">{s.desc}</p>
+                    <ul className="mt-6 space-y-3 flex-1">
+                      {s.includes.map((inc) => (
+                        <li key={inc} className="flex gap-3 text-sm text-ink">
+                          <Check size={16} className="text-accent shrink-0 mt-0.5" /> {inc}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-8 pt-5 border-t border-line text-sm">
+                      <span className="text-muted">{p.services.time}: </span>
+                      <span className="text-ink font-medium">{s.time}</span>
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="reveal mt-8 flex items-start gap-3 text-sm text-ink">
+              <ShieldCheck size={18} className="text-accent shrink-0" /> {p.services.ownership}
+            </p>
+
+            <div className="mt-28">
+              <h3 className="split-title text-2xl md:text-4xl font-medium tracking-tight text-ink mb-14">{p.process.title}</h3>
+              <div className="process-track relative">
+                <div className="process-line" aria-hidden="true"><span className="process-line-fill" /></div>
+                <ol className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-8">
+                  {p.process.steps.map((step, idx) => (
+                    <li key={step.title} className="process-step relative pl-10 md:pl-0 md:pt-10">
+                      <span className="process-dot" aria-hidden="true" />
+                      <p className="text-xs font-medium text-accent tabular-nums">0{idx + 1}</p>
+                      <p className="text-lg font-medium text-ink mt-1">{step.title}</p>
+                      <p className="text-sm text-muted leading-relaxed mt-1">{step.text}</p>
+                    </li>
                   ))}
+                </ol>
               </div>
-           </div>
-        </section>
-
-        {/* Contact Section - Updated with Form */}
-        <section id="contact" className="py-32 px-6 relative overflow-hidden bg-dark">
-          {/* Decorative Background */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-gradient-to-b from-indigo-900/10 to-transparent opacity-50 pointer-events-none"></div>
-          
-          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
-              
-              {/* Left Column: Info */}
-              <div className="lg:col-span-5 flex flex-col justify-center reveal">
-                <div className="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-indigo-500/30 animate-float">
-                   <Mail className="text-white w-8 h-8" />
-                </div>
-                
-                <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 tracking-tighter text-white">
-                  {t.titles.contact}
-                </h2>
-                <p className="text-xl text-slate-400 mb-10 leading-relaxed">
-                  {t.subtitles.contact}
-                </p>
-
-                <div className="space-y-6 mb-10">
-                  <div className="flex items-center gap-4 text-slate-300">
-                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/5">
-                      <Mail size={18} />
-                    </div>
-                    <a href="mailto:contatofranpires@gmail.com" className="hover:text-white transition-colors">contatofranpires@gmail.com</a>
-                  </div>
-                  <div className="flex items-center gap-4 text-slate-300">
-                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/5">
-                      <MapPin size={18} />
-                    </div>
-                    <span>{t.location}</span>
-                  </div>
-                </div>
-                
-                <div className="flex gap-4">
-                   {SOCIALS.map((social) => (
-                     <a 
-                       key={social.platform}
-                       href={social.url}
-                       className="w-12 h-12 flex items-center justify-center rounded-full border border-slate-700 text-slate-400 hover:text-white hover:border-white hover:bg-white/5 transition-all duration-300"
-                       aria-label={social.platform}
-                     >
-                       {social.icon}
-                     </a>
-                   ))}
-                </div>
-              </div>
-
-              {/* Right Column: Form */}
-              <div className="lg:col-span-7 reveal delay-200">
-                 <ContactForm texts={t.form} buttons={t.buttons} />
-              </div>
-
             </div>
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="py-12 border-t border-white/5 bg-dark text-center relative z-10">
-          <div className="flex items-center justify-center gap-2 mb-4 opacity-50 hover:opacity-100 transition-opacity cursor-default">
-             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-             <span className="text-xs font-mono text-slate-400">{t.footer.system}</span>
+        {/* 6. Sobre mim */}
+        <section id="about" className="py-24 md:py-32 border-t border-line">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+            <div className="lg:col-span-5 lg:sticky lg:top-28">
+              <p className="text-[11px] uppercase tracking-widest text-accent mb-3">{p.about.kicker}</p>
+              <div className="flex items-center gap-5 mb-6">
+                <img src={PROFILE_IMAGE_URL} alt="" className="w-16 h-16 rounded-full object-cover ring-2 ring-[var(--line)]" />
+                <h2 className="split-title text-3xl md:text-5xl font-medium tracking-tighter text-ink">{p.about.title}</h2>
+              </div>
+              <p className="reveal text-muted leading-relaxed">{p.about.text}</p>
+
+              <p className="text-[11px] uppercase tracking-widest text-muted mt-10 mb-3">{p.about.stack}</p>
+              <div className="reveal flex flex-wrap gap-2">
+                {stack.map((s) => (
+                  <span key={s} className="px-2.5 py-1 bg-surface border border-line rounded-md text-xs text-ink">{s}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-7">
+              <p className="text-[11px] uppercase tracking-widest text-muted mb-6">{p.about.journeyTitle}</p>
+              <ol className="relative border-l border-line ml-2">
+                {p.about.journey.map((step, i) => (
+                  <li key={step.title} className="reveal relative pl-8 pb-10 last:pb-0">
+                    <span className={`absolute -left-[7px] top-1.5 w-3.5 h-3.5 rounded-full border-2 ${i === 0 ? 'bg-paper border-[var(--muted)]' : 'bg-accent border-accent'}`} />
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <span className="text-xs font-medium text-accent uppercase tracking-widest">{step.when}</span>
+                      {step.tag && <span className="text-[11px] text-muted px-2 py-0.5 rounded-full border border-line">{step.tag}</span>}
+                    </div>
+                    <h3 className="text-lg md:text-xl font-medium text-ink mt-2">{step.title}</h3>
+                    <p className="text-sm text-muted leading-relaxed mt-1 max-w-xl">{step.text}</p>
+                  </li>
+                ))}
+              </ol>
+
+              <div className="mt-14 pt-8 border-t border-line">
+                <p className="text-[11px] uppercase tracking-widest text-muted mb-5">{p.about.quotesTitle}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {t.quotes.map((item) => (
+                    <blockquote key={item.by} className="reveal text-sm text-muted leading-relaxed">
+                      <p>“{item.text}”</p>
+                      <footer className="mt-3 text-xs text-muted opacity-80">— {item.by}</footer>
+                    </blockquote>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-slate-600 text-sm font-medium">
-            &copy; {new Date().getFullYear()} {PORTFOLIO_OWNER}  
-          </p>
+        </section>
+
+        {/* 7. Dúvidas + contato */}
+        <section id="contact" className="pb-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 border-t border-line pt-24">
+              <div className="lg:col-span-4">
+                <h2 className="split-title text-3xl md:text-5xl font-medium tracking-tighter text-ink">{p.faq.title}</h2>
+              </div>
+              <div className="reveal lg:col-span-8 border-b border-line">
+                {p.faq.items.map((item) => (
+                  <details key={item.q} className="group border-t border-line">
+                    <summary className="flex items-center justify-between gap-6 py-6 cursor-pointer list-none text-base md:text-lg font-medium text-ink">
+                      {item.q}
+                      <Plus size={18} className="shrink-0 text-accent transition-transform duration-300 group-open:rotate-45" />
+                    </summary>
+                    <p className="text-sm md:text-base text-muted leading-relaxed pb-6 pr-10">{item.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+
+            <div className="cta-block relative overflow-hidden mt-24 rounded-3xl border border-line p-8 md:p-14 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+              <div className="cta-glow" aria-hidden="true" />
+              <div className="relative lg:col-span-5">
+                <h2 className="split-title text-3xl md:text-6xl font-medium tracking-tighter leading-[1.02] text-ink">{p.contact.title}</h2>
+                <p className="mt-5 text-muted leading-relaxed">{p.contact.desc}</p>
+                <a href={WHATSAPP} target="_blank" rel="noreferrer" className="btn-whatsapp magnetic mt-8">
+                  <MessageCircle size={18} /> {p.contact.whatsapp}
+                </a>
+                <a href={`mailto:${EMAIL}`} className="mt-6 flex items-center gap-2 text-sm text-muted hover:text-ink">
+                  <Mail size={14} /> {EMAIL}
+                </a>
+                <div className="flex gap-3 mt-6">
+                  {SOCIALS.filter((s) => s.platform !== 'Email').map((social) => (
+                    <a
+                      key={social.platform}
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={social.platform}
+                      className="w-10 h-10 flex items-center justify-center rounded-full border border-line text-muted hover:text-ink hover:border-[var(--ink)] transition-colors"
+                    >
+                      {social.icon}
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <div className="relative lg:col-span-7">
+                <p className="text-[11px] uppercase tracking-widest text-muted mb-4">{p.contact.or}</p>
+                <ContactForm texts={t.form} buttons={t.buttons} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer className="py-10 border-t border-line">
+          <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between gap-3 text-xs text-muted">
+            <p>&copy; {new Date().getFullYear()} {PORTFOLIO_OWNER}</p>
+            <a href="#home" className="hover:text-ink">{p.backToTop} ↑</a>
+          </div>
         </footer>
       </main>
 
-      {/* Floating AI Chat */}
-      <Suspense fallback={null}>
-        <AIChat />
-      </Suspense>
+      <a
+        href={WHATSAPP}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={p.contact.whatsapp}
+        title={p.contact.whatsapp}
+        className="fixed bottom-6 right-6 z-[60] w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+      >
+        <MessageCircle size={26} />
+      </a>
     </div>
   );
 }

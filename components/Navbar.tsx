@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code, User, Send, Layout, Globe } from 'lucide-react';
+import { Menu, X, User, Send, Layout, Globe, Moon, Sun, Workflow } from 'lucide-react';
 import { Language } from '../types';
-import { TRANSLATIONS } from '../constants';
+import { TRANSLATIONS, WHATSAPP } from '../constants';
 
 interface NavbarProps {
   language: Language;
@@ -13,12 +13,20 @@ const Navbar: React.FC<NavbarProps> = ({ language, setLanguage, texts }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  const toggleTheme = () => {
+    const next = !document.documentElement.classList.contains('dark');
+    document.documentElement.classList.toggle('dark', next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+    setDark(next);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      const sections = ['home', 'projects', 'skills', 'contact'];
+      const sections = ['home', 'work', 'services', 'about', 'contact'];
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -35,9 +43,9 @@ const Navbar: React.FC<NavbarProps> = ({ language, setLanguage, texts }) => {
   }, []);
 
   const navLinks = [
-    { name: texts.home, href: '#home', id: 'home', icon: <User size={14} /> },
-    { name: texts.projects, href: '#projects', id: 'projects', icon: <Layout size={14} /> },
-    { name: texts.skills, href: '#skills', id: 'skills', icon: <Code size={14} /> },
+    { name: texts.work, href: '#work', id: 'work', icon: <Layout size={14} /> },
+    { name: texts.services, href: '#services', id: 'services', icon: <Workflow size={14} /> },
+    { name: texts.about, href: '#about', id: 'about', icon: <User size={14} /> },
     { name: texts.contact, href: '#contact', id: 'contact', icon: <Send size={14} /> },
   ];
 
@@ -47,52 +55,60 @@ const Navbar: React.FC<NavbarProps> = ({ language, setLanguage, texts }) => {
 
   return (
     <>
-      <nav className={`fixed top-6 left-0 right-0 z-50 flex justify-center transition-all duration-500 ${scrolled ? 'translate-y-0' : 'translate-y-2'}`}>
-        <div className="mx-4 md:mx-0 perspective-1000">
-          <div className={`rounded-full pl-2 pr-2 py-1.5 flex items-center gap-1 transition-all duration-500 shadow-2xl ${
-            scrolled 
-              ? 'bg-slate-900/80 border border-white/10 backdrop-blur-2xl shadow-black/50' 
-              : 'bg-slate-900/60 border border-white/5 backdrop-blur-lg'
-          }`}>
-            
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center p-1">
+      <nav className="site-header fixed top-0 left-0 right-0 z-50 border-b border-line">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="h-16 flex items-center gap-2">
+            <a href="#home" className="tracking-tight text-lg font-medium text-ink mr-4">
+              Franciane
+            </a>
+            <div className="hidden md:flex items-center gap-1 ml-auto">
               {navLinks.map((link) => (
                 <a 
                   key={link.id} 
                   href={link.href}
-                  className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 group overflow-hidden
-                    ${activeSection === link.id 
-                      ? 'text-white shadow-lg' 
-                      : 'text-slate-400 hover:text-white'}`}
+                  className={`nav-link px-3 py-1.5 rounded-full text-[11px] font-medium uppercase tracking-widest transition-colors ${activeSection === link.id ? 'is-active text-ink' : 'text-zinc-500 hover:text-ink'}`}
                 >
-                  {activeSection === link.id && (
-                    <div className="absolute inset-0 bg-white/10 rounded-full border border-white/5 shadow-inner"></div>
-                  )}
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 rounded-full transition-opacity duration-300"></div>
-
-                  <span className={`relative z-10 transition-colors duration-300 ${activeSection === link.id ? 'text-indigo-400' : 'group-hover:text-indigo-300'}`}>{link.icon}</span>
-                  <span className="relative z-10">{link.name}</span>
+                  <span>{link.name}</span>
                 </a>
               ))}
             </div>
 
             {/* Language Toggle */}
-            <div className="flex items-center ml-2 border-l border-white/10 pl-2">
+            <div className="hidden md:flex items-center ml-1 gap-1">
                 <button 
                   onClick={toggleLanguage}
-                  className="relative px-3 py-1.5 rounded-full flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all group"
+                  className="px-3 py-1.5 rounded-md flex items-center gap-2 text-xs font-medium text-muted hover:text-ink hover:bg-surface border border-transparent hover:border-line transition-colors"
                 >
-                  <Globe size={14} className="text-indigo-400" />
+                  <Globe size={14} />
                   <span>{language.toUpperCase()}</span>
                 </button>
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className="p-2 rounded-md text-muted hover:text-ink hover:bg-surface border border-transparent hover:border-line"
+                  aria-label={dark ? 'Usar tema claro' : 'Usar tema escuro'}
+                >
+                  {dark ? <Sun size={16} /> : <Moon size={16} />}
+                </button>
+                <a href={WHATSAPP} target="_blank" rel="noreferrer" className="btn-glow ml-3 !py-2 !px-4 text-sm">
+                  {texts.cta}
+                </a>
             </div>
 
             {/* Mobile Header */}
-            <div className="md:hidden flex items-center justify-between px-4 ml-2 gap-4">
-              <span className="font-display font-bold text-white tracking-wide text-lg">Fran<span className="text-indigo-500">.</span></span>
+            <div className="md:hidden flex items-center justify-between ml-auto gap-1">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="p-2 text-ink"
+                aria-label={dark ? 'Usar tema claro' : 'Usar tema escuro'}
+              >
+                {dark ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
               <button 
-                className="p-2 text-slate-300 hover:text-white active:scale-95 transition-transform"
+                className="p-2 text-ink"
+                aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+                aria-expanded={mobileMenuOpen}
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -104,24 +120,24 @@ const Navbar: React.FC<NavbarProps> = ({ language, setLanguage, texts }) => {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-dark/95 backdrop-blur-3xl md:hidden flex items-center justify-center animate-fade-in-up">
+        <div className="fixed inset-0 z-40 bg-paper md:hidden flex items-center justify-center">
           <div className="flex flex-col gap-8 text-center w-full max-w-xs">
             {navLinks.map((link, idx) => (
               <a 
                 key={link.id} 
                 href={link.href}
                 style={{ animationDelay: `${idx * 50}ms` }}
-                className={`text-3xl font-display font-bold flex items-center justify-center gap-4 transition-colors animate-fade-in-up ${activeSection === link.id ? 'text-indigo-400' : 'text-slate-300'}`}
+                className={`text-3xl font-display uppercase flex items-center justify-center gap-4 ${activeSection === link.id ? 'text-ink' : 'text-muted'}`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.icon}
                 {link.name}
               </a>
             ))}
-            <div className="mt-8 pt-8 border-t border-white/10 flex justify-center gap-6">
+            <div className="mt-8 pt-8 border-t border-line flex justify-center gap-6">
                 <button 
                   onClick={toggleLanguage}
-                  className="px-6 py-2 rounded-full border border-white/10 text-white flex items-center gap-2 hover:bg-white/10"
+                  className="px-6 py-2 rounded-md border border-line text-ink flex items-center gap-2 hover:bg-surface"
                 >
                   <Globe size={16} />
                   Mudar para {language === 'pt' ? 'Inglês' : 'Portuguese'}
