@@ -34,3 +34,13 @@ export interface SocialLink {
   url: string;
   icon: React.ReactNode;
 }
+
+export interface Experience {
+  id: string;
+  initials: string;
+  company: string;
+  period: string;
+  role: string;
+  description: string;
+  tags: string[];
+}
