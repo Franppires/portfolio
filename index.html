@@ -578,9 +578,7 @@
       .work-track { scrollbar-width: none; }
       .work-track::-webkit-scrollbar { display: none; }
       @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { .work-track { overflow: visible !important; scroll-snap-type: none !important; } }
-      .work-card { flex: 0 0 auto; width: 72vw; display: block; }
-      @media (min-width: 640px) { .work-card { width: 40vw; } }
-      @media (min-width: 1024px) { .work-card { width: 24vw; max-width: 380px; } }
+      .work-card { display: block; }
       .work-media { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #1f1d1b; }
       .work-media img { width: 100%; aspect-ratio: 16/10; object-fit: cover; object-position: top; transition: transform .9s cubic-bezier(.16,1,.3,1); }
       .work-card:hover .work-media img { transform: scale(1.05); }
@@ -618,6 +616,17 @@
       }
       .cursor-label.is-on { scale: 1; }
       .magnetic { will-change: transform; }
+      .carousel-track { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+      .carousel-track::-webkit-scrollbar { display: none; }
+      .carousel-bleed { padding-left: max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem)); padding-right: 1.5rem; scroll-padding-left: max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem)); }
+      @media (pointer: fine) { .carousel-track { cursor: grab; } }
+      .carousel-track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+      .carousel-track.is-dragging * { pointer-events: none; }
+      .carousel-arrow {
+        width: 42px; height: 42px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink);
+        display: inline-flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s;
+      }
+      .carousel-arrow:hover { background: var(--surface); border-color: color-mix(in srgb, var(--ink) 35%, var(--line)); }
       .swipe-hint { display: inline-block; color: var(--accent); animation: swipe 1.6s ease-in-out infinite; }
       @keyframes swipe { 0%,100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
       .agency-tag {

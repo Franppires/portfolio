@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { gsap, ScrollTrigger, prefersReduced } from './motion';
 import { Project } from '../types';
 import { isAgency } from '../content';
+import Carousel from './Carousel';
 
 interface CaseItem {
   id: string;
@@ -55,7 +56,7 @@ const CasesPinned: React.FC<Props> = ({ cases, labels, agencyTag }) => {
           <h2 className="split-title text-3xl md:text-6xl font-medium tracking-tighter text-ink max-w-3xl">{labels.title}</h2>
         </div>
 
-        <div className="lg:grid lg:grid-cols-12 lg:gap-16">
+        <div className="hidden lg:grid lg:grid-cols-12 lg:gap-16">
           {/* Imagem fixa (desktop) */}
           <div className="hidden lg:block lg:col-span-7">
             <div className="sticky top-[14vh] h-[72vh] flex items-center">
@@ -89,9 +90,6 @@ const CasesPinned: React.FC<Props> = ({ cases, labels, agencyTag }) => {
           <div className="lg:col-span-5">
             {cases.map((c) => (
               <article key={c.id} className="case-block py-12 lg:min-h-[80vh] lg:flex lg:flex-col lg:justify-center">
-                <a href={c.project.link} target="_blank" rel="noreferrer" className="case-anim lg:hidden block mb-8 rounded-xl overflow-hidden border border-line">
-                  <img src={c.project.imageUrl} alt={c.project.title} className="w-full aspect-[16/10] object-cover object-top" loading="lazy" />
-                </a>
                 <p className="case-anim flex flex-wrap items-center gap-3 text-xs uppercase tracking-widest text-accent mb-3">
                   {c.kind}
                   {isAgency(c.id) && <span className="normal-case tracking-normal text-[11px] text-muted px-2 py-0.5 rounded-full border border-line">{agencyTag}</span>}
@@ -120,6 +118,43 @@ const CasesPinned: React.FC<Props> = ({ cases, labels, agencyTag }) => {
               </article>
             ))}
           </div>
+        </div>
+        {/* Celular: carrossel de cases */}
+        <div className="lg:hidden -mx-6">
+          <Carousel
+            ariaLabel={labels.kicker}
+            dots
+            arrows={false}
+            itemClassName="w-[86vw]"
+            trackClassName="px-6 scroll-px-6"
+            items={cases.map((c) => (
+              <article className="h-full flex flex-col">
+                <a href={c.project.link} target="_blank" rel="noreferrer" className="block mb-6 rounded-xl overflow-hidden border border-line" draggable={false}>
+                  <img src={c.project.imageUrl} alt={c.project.title} className="w-full aspect-[16/10] object-cover object-top" loading="lazy" draggable={false} />
+                </a>
+                <p className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-widest text-accent mb-2">
+                  {c.kind}
+                  {isAgency(c.id) && <span className="normal-case tracking-normal text-[11px] text-muted px-2 py-0.5 rounded-full border border-line">{agencyTag}</span>}
+                </p>
+                <h3 className="text-2xl font-medium tracking-tight text-ink mb-5">{c.project.title}</h3>
+                <dl className="space-y-4 text-[15px]">
+                  <div>
+                    <dt className="text-[11px] uppercase tracking-widest text-muted mb-1">{labels.challenge}</dt>
+                    <dd className="leading-relaxed text-ink">{c.challenge}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[11px] uppercase tracking-widest text-muted mb-1">{labels.solution}</dt>
+                    <dd className="leading-relaxed text-ink">{c.solution}</dd>
+                  </div>
+                </dl>
+                {c.project.link && (
+                  <a href={c.project.link} target="_blank" rel="noreferrer" className="case-link inline-flex items-center gap-2 mt-6 text-sm font-medium text-ink w-fit">
+                    {labels.visit} <ArrowUpRight size={16} />
+                  </a>
+                )}
+              </article>
+            ))}
+          />
         </div>
       </div>
     </section>
