@@ -84,7 +84,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ texts, buttons }) => {
               placeholder={texts.placeholders.name}
               value={formData.name}
               onChange={handleChange}
-              className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-zinc-400 focus:border-ink outline-none transition-colors"
+              className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-[color-mix(in_srgb,var(--muted)_65%,transparent)] focus:border-ink outline-none transition-colors"
             />
           </div>
           <div className="space-y-2">
@@ -96,7 +96,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ texts, buttons }) => {
               placeholder={texts.placeholders.email}
               value={formData.email}
               onChange={handleChange}
-              className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-zinc-400 focus:border-ink outline-none transition-colors"
+              className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-[color-mix(in_srgb,var(--muted)_65%,transparent)] focus:border-ink outline-none transition-colors"
             />
           </div>
         </div>
@@ -110,7 +110,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ texts, buttons }) => {
             placeholder={texts.placeholders.subject}
             value={formData.subject}
             onChange={handleChange}
-            className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-zinc-400 focus:border-ink outline-none transition-colors"
+            className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-[color-mix(in_srgb,var(--muted)_65%,transparent)] focus:border-ink outline-none transition-colors"
           />
         </div>
 
@@ -123,7 +123,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ texts, buttons }) => {
             placeholder={texts.placeholders.message}
             value={formData.message}
             onChange={handleChange}
-            className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-zinc-400 focus:border-ink outline-none transition-colors resize-none"
+            className="w-full bg-paper border border-line rounded-md px-3 py-2.5 text-ink text-sm placeholder:text-[color-mix(in_srgb,var(--muted)_65%,transparent)] focus:border-ink outline-none transition-colors resize-none"
           />
         </div>
 
